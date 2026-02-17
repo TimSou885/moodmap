@@ -34,6 +34,21 @@ export async function buildApp() {
     }
   });
 
+  app.get('/', async (_request, reply) => {
+    return reply.send({
+      name: 'MoodMap API',
+      version: '0.1.0-alpha',
+      docs: '/v1',
+      endpoints: {
+        moodTags: 'GET /v1/mood-tags',
+        careResources: 'GET /v1/care-resources?lat=&lng=',
+        auth: 'POST /v1/auth/anonymous',
+        moods: 'POST /v1/moods, GET /v1/moods/nearby, GET /v1/moods/:id',
+        reactions: 'POST /v1/moods/:id/reactions, GET /v1/moods/:id/reactions',
+      },
+    });
+  });
+
   app.register(authRoutes, { prefix: '/v1' });
   app.register(careResourcesRoutes, { prefix: '/v1' });
   app.register(moodTagsRoutes, { prefix: '/v1' });
