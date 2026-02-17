@@ -14,7 +14,7 @@ export async function buildApp() {
 
   app.addHook('onRequest', (request, _reply, done) => {
     const cf = (request.headers['cf-connecting-ip'] as string) || request.headers['x-forwarded-for'];
-    if (cf) (request as any).ip = (typeof cf === 'string' ? cf.split(',')[0] : cf[0])?.trim() || request.ip;
+    if (cf) (request as any).clientIp = (typeof cf === 'string' ? cf.split(',')[0] : cf[0])?.trim();
     done();
   });
 

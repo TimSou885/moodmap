@@ -52,7 +52,16 @@ Railway 會建立一個 **Service**，並開始用專案裡的 **Dockerfile** �
 
 **注意**：`PORT` 不需手動設，Railway 會自動注入。
 
-4. 儲存後，若尚未部署或要重新部署，到 **「Deployments」** 分頁點 **「Redeploy」** 或等下次 push 自動部署。
+4. 儲存後，到 **「Deployments」** 分頁點 **「Redeploy」**（補上變數後一定要手動觸發一次重新部署，新的變數才會在執行時生效）。
+
+**若出現 Invalid environment configuration**：  
+若日誌出現 `Env diagnostic (keys only): { relevantKeys: [], hasDATABASE_URL: false, hasJWT_SECRET: false }`，代表**目前這個正在跑的 Service 沒有收到任何 DATABASE/JWT 變數**。請依序做：
+
+1. 在 **同一個會噴這段錯誤的 Service** 裡，點 **Variables**（不是專案總覽的 Variables）。
+2. 點 **+ New Variable**，新增兩筆（名稱一字不差）：  
+   - 名稱 `DATABASE_URL`，值貼上 Neon 的 Pooled 連線字串。  
+   - 名稱 `JWT_SECRET`，值貼上至少 32 字元的密鑰。
+3. 儲存後，到 **Deployments** → 對最新部署點 **Redeploy**（或 ⋮ → Redeploy），等新部署跑完再測。
 
 ---
 
