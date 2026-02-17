@@ -14,7 +14,7 @@ if (isNeon || config.NODE_ENV === 'production') {
 
 const pool = new pg.Pool(poolConfig);
 
-export async function query<T = pg.QueryResultRow>(
+export async function query<T extends pg.QueryResultRow = pg.QueryResultRow>(
   text: string,
   params?: unknown[]
 ): Promise<pg.QueryResult<T>> {

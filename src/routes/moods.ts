@@ -18,8 +18,9 @@ const nearbyQuerySchema = z.object({
 });
 
 export default async function moodsRoutes(app: FastifyInstance) {
+  const auth = (app as FastifyInstance & { authenticate: (req: unknown, rep: unknown) => Promise<void> }).authenticate;
   app.post('/moods', {
-    onRequest: [app.authenticate],
+    onRequest: [auth],
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const parse = createBodySchema.safeParse(request.body);
     if (!parse.success) {
@@ -76,7 +77,7 @@ export default async function moodsRoutes(app: FastifyInstance) {
   });
 
   app.get('/moods/nearby', {
-    onRequest: [app.authenticate],
+    onRequest: [auth],
   }, async (request: FastifyRequest, reply: FastifyReply) => {
     const parse = nearbyQuerySchema.safeParse(request.query);
     if (!parse.success) {
@@ -110,7 +111,7 @@ export default async function moodsRoutes(app: FastifyInstance) {
   });
 
   app.get<{ Params: { id: string } }>('/moods/:id', {
-    onRequest: [app.authenticate],
+    onRequest: [auth],
   }, async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
     const userId = (request as any).user.sub;
     const mood = await getMoodById(request.params.id, userId);

@@ -11,7 +11,7 @@ export async function addReaction(
   userId: string,
   reactionType: string
 ): Promise<{ ok: boolean; error?: string }> {
-  if (!VALID_TYPES.includes(reactionType as any)) {
+  if (!VALID_TYPES.has(reactionType as typeof CANNED_RESPONSES[number] | typeof EMOJI_REACTIONS[number])) {
     return { ok: false, error: 'INVALID_REACTION_TYPE' };
   }
   try {

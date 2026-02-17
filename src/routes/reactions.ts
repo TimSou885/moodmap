@@ -7,8 +7,9 @@ const bodySchema = z.object({
 });
 
 export default async function reactionsRoutes(app: FastifyInstance) {
+  const auth = (app as FastifyInstance & { authenticate: (req: unknown, rep: unknown) => Promise<void> }).authenticate;
   app.post<{ Params: { id: string } }>('/moods/:id/reactions', {
-    onRequest: [app.authenticate],
+    onRequest: [auth],
   }, async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
     const parse = bodySchema.safeParse(request.body);
     if (!parse.success) {
@@ -35,7 +36,7 @@ export default async function reactionsRoutes(app: FastifyInstance) {
   });
 
   app.get<{ Params: { id: string } }>('/moods/:id/reactions', {
-    onRequest: [app.authenticate],
+    onRequest: [auth],
   }, async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
     const list = await getReactionsByMoodId(request.params.id);
     return reply.send({ data: list });
